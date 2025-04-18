@@ -81,6 +81,51 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
+// ——————————————————————————
+// Touch Controls for Mobile
+// ——————————————————————————
+
+// Prevent the page from scrolling when touching the canvas
+canvas.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+canvas.addEventListener('touchmove',  e => e.preventDefault(), { passive: false });
+
+// On touch start: for each finger, decide move or shoot
+canvas.addEventListener('touchstart', e => {
+  const rect = canvas.getBoundingClientRect();
+  for (let i = 0; i < e.touches.length; i++) {
+    const touch = e.touches[i];
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+
+    // Bottom 30% of canvas = movement zone
+    if (y > canvas.height * 0.7) {
+      if (x < canvas.width / 2) {
+        rocket.movingLeft  = true;
+      } else {
+        rocket.movingRight = true;
+      }
+    }
+    // Upper 70% = shoot zone
+    else {
+      bullets.push({ x: rocket.x + rocket.width / 2, y: rocket.y });
+    }
+  }
+}, { passive: false });
+
+// On touch end: stop movement when all fingers lifted
+canvas.addEventListener('touchend', e => {
+  // If no more fingers on screen, reset movement flags
+  if (e.touches.length === 0) {
+    rocket.movingLeft  = false;
+    rocket.movingRight = false;
+  }
+});
+canvas.addEventListener('touchcancel', e => {
+  // If touch is cancelled, reset movement flags
+  rocket.movingLeft  = false;
+  rocket.movingRight = false;
+}, { passive: false });
+
 // Create new bullet
 function shootBullet() {
 const bullet = {

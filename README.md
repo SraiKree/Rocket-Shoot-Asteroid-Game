@@ -11,6 +11,7 @@ A lightweight, retro-inspired space shooter built using **HTML**, **CSS**, and *
 - **Shoot** with the **Right click** or **Spacebar**
 - **Score increases** as you destroy falling asteroids
 - **Stars in background** adds a sense of dynamic motion
+- Now supports **mobile devices** too
 
 
 ---
