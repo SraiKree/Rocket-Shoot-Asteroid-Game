@@ -82,49 +82,59 @@ window.addEventListener('keydown', (e) => {
 });
 
 // ——————————————————————————
-// Touch Controls for Mobile
+// Touch Controls (One touch to move, second to shoot)
 // ——————————————————————————
 
-// Prevent the page from scrolling when touching the canvas
-canvas.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
-canvas.addEventListener('touchmove',  e => e.preventDefault(), { passive: false });
-
-// On touch start: for each finger, decide move or shoot
 canvas.addEventListener('touchstart', e => {
-  const rect = canvas.getBoundingClientRect();
-  for (let i = 0; i < e.touches.length; i++) {
-    const touch = e.touches[i];
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
+  e.preventDefault();
 
-    // Bottom 30% of canvas = movement zone
-    if (y > canvas.height * 0.7) {
-      if (x < canvas.width / 2) {
-        rocket.movingLeft  = true;
-      } else {
-        rocket.movingRight = true;
-      }
+  if (e.touches.length >= 1) {
+    const rect = canvas.getBoundingClientRect();
+    const touchX = e.touches[0].clientX - rect.left;
+
+    // Move rocket towards touchX
+    if (touchX < rocket.x) {
+      rocket.movingLeft = true;
+      rocket.movingRight = false;
+    } else {
+      rocket.movingRight = true;
+      rocket.movingLeft = false;
     }
-    // Upper 70% = shoot zone
-    else {
-      bullets.push({ x: rocket.x + rocket.width / 2, y: rocket.y });
+  }
+
+  if (e.touches.length >= 2) {
+    // Second finger = fire
+    bullets.push({ x: rocket.x + rocket.width / 2, y: rocket.y });
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+
+  if (e.touches.length >= 1) {
+    const rect = canvas.getBoundingClientRect();
+    const touchX = e.touches[0].clientX - rect.left;
+
+    // Update direction based on movement
+    if (touchX < rocket.x) {
+      rocket.movingLeft = true;
+      rocket.movingRight = false;
+    } else {
+      rocket.movingRight = true;
+      rocket.movingLeft = false;
     }
   }
 }, { passive: false });
 
-// On touch end: stop movement when all fingers lifted
 canvas.addEventListener('touchend', e => {
-  // If no more fingers on screen, reset movement flags
+  e.preventDefault();
+
   if (e.touches.length === 0) {
-    rocket.movingLeft  = false;
+    rocket.movingLeft = false;
     rocket.movingRight = false;
   }
 });
-canvas.addEventListener('touchcancel', e => {
-  // If touch is cancelled, reset movement flags
-  rocket.movingLeft  = false;
-  rocket.movingRight = false;
-}, { passive: false });
+
 
 // Create new bullet
 function shootBullet() {
