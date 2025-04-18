@@ -1,6 +1,6 @@
 # 🚀 Rocket Shooter – HTML5 Canvas Minigame
 
-A lightweight, retro-inspired space shooter built using **HTML**, **CSS**, and **JavaScript**, designed to be easily embedded into any website. You control a pixel rocket, shoot down falling asteroids, and rack up your score – all set against a sleek black-and-red starfield backdrop.
+A lightweight, retro-inspired space shooter built using **HTML**, **CSS**, and **JavaScript**, designed to be easily embedded into any website. You control a pixel rocket, shoot down falling asteroids, and rack up your score – all set against a sleek black-and-red dynamic star backdrop. 
 
 ---
 
@@ -13,7 +13,6 @@ A lightweight, retro-inspired space shooter built using **HTML**, **CSS**, and *
 - **Stars in background** adds a sense of dynamic motion
 - Now supports **mobile devices** too
 
-
 ---
 
 ## ✨ Features
@@ -24,5 +23,5 @@ A lightweight, retro-inspired space shooter built using **HTML**, **CSS**, and *
 - 🎯 Collision detection and scoring
 - 🌌 Animated starfield background
 - 🖤 Red/black sci-fi theme for visual consistency
-
+- 🎮 Difficulty scales with the score
 ---
