@@ -1,3 +1,5 @@
+import { initMobileControls } from './mobile-controls.js';
+
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 let score = 0;
@@ -135,6 +137,9 @@ canvas.addEventListener('touchend', e => {
   }
 });
 
+if ('ontouchstart' in window) {
+    initMobileControls(canvas, rocket, shootBullet);
+}
 
 // Create new bullet
 function shootBullet() {
