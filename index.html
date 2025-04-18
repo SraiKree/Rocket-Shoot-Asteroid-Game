@@ -3,9 +3,18 @@
 
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000000">
+  
   <title>Rocket Game</title>
   <link href="assets/css/game.css" rel="stylesheet">
+  
+  <!-- Add touch icons -->
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 </head>
 
 <body>
@@ -21,7 +30,14 @@
     </div>
   </section>
 
-  <script src="assets/js/game.js"></script>
+  <script type="module" src="assets/js/game.js"></script>
+    
+  <!-- Prevent double tap zoom on iOS -->
+  <script>
+      document.addEventListener('touchend', function(event) {
+          event.preventDefault();
+      }, false);
+  </script>
 </body>
 
 </html>

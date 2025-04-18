@@ -1,3 +1,6 @@
+import { GAME_CONFIG } from '../config/constants.js';
+import { initMobileControls } from './mobile-controls.js';
+
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 let score = 0;
@@ -5,6 +8,11 @@ let gameRunning = false;
 let gameStarted = false;
 let restartButton = null;
 const scoreBoard = document.getElementById('score-board');
+
+// Add after canvas initialization
+if ('ontouchstart' in window) {
+    initMobileControls(canvas, rocket, shootBullet);
+}
 
 // --- Stars Background ---
 const numStars = 100;
@@ -52,12 +60,12 @@ const rocket = {
 
 // Bullets
 const bullets = [];
-const bulletSpeed = 8;
-const bulletSize = 6;
+let bulletSpeed = 8;
+let bulletSize = 6;
 
 // Asteroids
 const asteroids = [];
-const asteroidSize = 25; 
+let asteroidSize = 25; 
 const rotationSpeed = 0.02; 
 
 // Mouse tracking for rocket movement
@@ -501,16 +509,58 @@ function showRestartButton() {
   container.appendChild(restartButton);
 }
 // Isn't it tad stylish? - Tree.
-// Initialize game
-window.addEventListener('load', () => {
-  console.log("Game initializing");
-  canvas.width = 800;
-  canvas.height = 600;
-  rocket.x = canvas.width / 2;
-  rocket.y = canvas.height - 60;
+// Optimize for mobile
+function optimizeForMobile() {
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+        // Reduce particle effects on mobile
+        particleCount = 50;
+        numStars = 50;
+        
+        // Optimize render quality
+        ctx.imageSmoothingEnabled = false;
+        
+        // Adjust game speed for mobile
+        bulletSpeed = 10;
+        asteroidSize = 35;
+    }
+}
 
-  showStartButton();
-});
+// Initialize game
+function initGame() {
+    const isMobile = window.innerWidth < 768;
+    
+    // Responsive canvas sizing
+    const aspectRatio = 4/3;
+    if (isMobile) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    } else {
+        canvas.width = 800;
+        canvas.height = 600;
+    }
+    
+    // Adjust game elements for mobile
+    if(isMobile) {
+        rocket.speed = 8;
+        bulletSize = 8;
+        asteroidSize = 30;
+        rocket.width = 50;  // Larger rocket for better touch targets
+        rocket.height = 75;
+    }
+    
+    // Reset rocket position after resize
+    rocket.x = canvas.width / 2;
+    rocket.y = canvas.height - 60;
+    
+    // Prevent mobile touch actions
+    canvas.style.touchAction = 'none';
+    
+    optimizeForMobile();
+}
+
+window.addEventListener('load', initGame);
+window.addEventListener('resize', debounce(initGame, 250));
 
 // Responsive canvas resize handler
 window.addEventListener('resize', () => {
@@ -521,4 +571,15 @@ window.addEventListener('resize', () => {
   
   // Keep rocket at the bottom
   rocket.y = canvas.height - 60;
+});
+
+window.addEventListener('orientationchange', () => {
+    setTimeout(() => {
+        initGame();
+        // Pause briefly to let orientation complete
+        gameRunning = false;
+        setTimeout(() => {
+            gameRunning = true;
+        }, 500);
+    }, 100);
 });
