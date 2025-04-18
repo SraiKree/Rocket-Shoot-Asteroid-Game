@@ -52,12 +52,12 @@ const rocket = {
 
 // Bullets
 const bullets = [];
-const bulletSpeed = 8;
-const bulletSize = 6;
+let bulletSpeed = 8;
+let bulletSize = 6;
 
 // Asteroids
 const asteroids = [];
-const asteroidSize = 25; 
+let asteroidSize = 25; 
 const rotationSpeed = 0.02; 
 
 // Mouse tracking for rocket movement
@@ -501,7 +501,27 @@ function showRestartButton() {
   container.appendChild(restartButton);
 }
 // Isn't it tad stylish? - Tree.
+
 // Initialize game
+function initGame() {
+    // Set canvas size based on screen
+    const isMobile = window.innerWidth < 768;
+    canvas.width = isMobile ? window.innerWidth : 800;
+    canvas.height = isMobile ? window.innerHeight : 600;
+    
+    // Adjust game elements for mobile
+    if(isMobile) {
+        rocket.speed = 8; // Increased for better mobile control
+        bulletSize = 8;   // Larger bullets for mobile
+        asteroidSize = 30; // Larger asteroids for mobile
+    }
+    
+    preventDefaultTouchActions(canvas);
+}
+
+window.addEventListener('load', initGame);
+window.addEventListener('resize', initGame);
+
 window.addEventListener('load', () => {
   console.log("Game initializing");
   canvas.width = 800;
